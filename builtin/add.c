@@ -499,6 +499,10 @@ int cmd_add(int argc, const char **argv, const char *prefix)
 
 		for (i = 0; i < pathspec.nr; i++) {
 			const char *path = pathspec.items[i].match;
+			int dtype = DT_UNKNOWN;
+			int excluded = is_excluded(&dir, &the_index, path, &dtype);
+			if (file_exists(path) && excluded)
+				continue;
 			if (pathspec.items[i].magic & PATHSPEC_EXCLUDE)
 				continue;
 			if (!seen[i] && path[0] &&
@@ -506,8 +510,7 @@ int cmd_add(int argc, const char **argv, const char *prefix)
 			      (PATHSPEC_GLOB | PATHSPEC_ICASE)) ||
 			     !file_exists(path))) {
 				if (ignore_missing) {
-					int dtype = DT_UNKNOWN;
-					if (is_excluded(&dir, &the_index, path, &dtype))
+					if (excluded)
 						dir_add_ignored(&dir, &the_index,
 								path, pathspec.items[i].len);
 				} else

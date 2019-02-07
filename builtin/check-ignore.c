@@ -87,7 +87,7 @@ static int check_ignore(struct dir_struct *dir,
 	 * irrelevant.
 	 */
 	parse_pathspec(&pathspec,
-		       PATHSPEC_ALL_MAGIC & ~PATHSPEC_FROMTOP,
+		       PATHSPEC_ALL_MAGIC & ~PATHSPEC_FROMTOP & ~PATHSPEC_ICASE,
 		       PATHSPEC_SYMLINK_LEADING_PATH |
 		       PATHSPEC_KEEP_ORDER,
 		       prefix, argv);
