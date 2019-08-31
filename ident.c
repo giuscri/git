@@ -224,22 +224,12 @@ static int has_non_crud(const char *str)
  */
 static void strbuf_addstr_without_crud(struct strbuf *sb, const char *src)
 {
-	size_t i, len;
+	size_t i, len = strlen(src);
 	unsigned char c;
 
-	/* Remove crud from the beginning.. */
-	while ((c = *src) != 0) {
-		if (!crud(c))
-			break;
+	/* Remove crud when both at the beginning and at the end.. */
+	while (*src != 0 && *src == src[len-1] && crud(*src)) {
 		src++;
-	}
-
-	/* Remove crud from the end.. */
-	len = strlen(src);
-	while (len > 0) {
-		c = src[len-1];
-		if (!crud(c))
-			break;
 		--len;
 	}
 
